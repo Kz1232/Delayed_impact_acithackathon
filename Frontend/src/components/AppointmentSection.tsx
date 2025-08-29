@@ -43,7 +43,7 @@ export default function AppointmentSection({ onAppointmentBooked }) {
     e.preventDefault();
     setLoading(true);
     setTimeout(() => {
-      setSuccess("Appointment booked successfully! (Frontend only)");
+      setSuccess("Appointment booked successfully!");
       setForm({ service: "", date: "", time: "" });
       setLoading(false);
       if (onAppointmentBooked) onAppointmentBooked();
