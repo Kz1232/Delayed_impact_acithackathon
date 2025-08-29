@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import api from "../services/api";
+import api from "../services/api";
 
 const DUMMY_TIMES = {
   Consultation: ["10:00", "11:00", "12:00"],
@@ -21,34 +21,25 @@ export default function AppointmentSection({ onAppointmentBooked }) {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-//     setSuccess("");
-//     try {
-//       await api.post("/appointments", form);
-//       setSuccess("Appointment booked successfully!");
-//       setForm({ service: "", date: "", time: "" });
-//       onAppointmentBooked();
-//     } catch (error) {
-//       console.error("Booking failed:", error);
-//       setSuccess("Failed to book appointment. Please try again.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
 
-  // Dummy frontend-only submit handler
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    setSuccess("");
+    try {
+      await api.post("/appointments", form);
       setSuccess("Appointment booked successfully!");
       setForm({ service: "", date: "", time: "" });
-      setLoading(false);
       if (onAppointmentBooked) onAppointmentBooked();
-    }, 800);
+    } catch (error) {
+      console.error("Booking failed:", error);
+      setSuccess("Failed to book appointment. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  // ...existing code...
 
   // Get available times for selected service
   const availableTimes = form.service ? DUMMY_TIMES[form.service] : [];
