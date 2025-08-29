@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link ,useNavigate } from "react-router-dom";
 import { useState } from "react";
+import api from "../services/api";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -12,6 +13,7 @@ export default function Register() {
     // address: "",
   });
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -27,7 +29,36 @@ export default function Register() {
     }
     setError("");
     // Submit logic here
-    alert("Registered successfully! (Demo)");
+    
+    api.post("/auth/register", {
+      name: form.name,
+      phone: form.phone,
+      password: form.password,
+      confirmPassword:form.confirmPassword,
+      age: form.age,
+      gender: form.gender,
+      // address: form.address, // if you add address
+    })
+    .then((res) => {
+  alert("Registered successfully!");
+  setForm({
+    name: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+    age: "",
+    gender: "",
+    // address: "",
+  });
+  navigate("/login"); // or your desired route
+})
+    .catch((err) => {
+      console.error(err);
+      setError(
+        err.response?.data?.message || "Registration failed. Please try again."
+      );
+    });
+    // alert("Registered successfully! (Demo)");
   }
 
   return (
